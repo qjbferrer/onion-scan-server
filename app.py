@@ -8,7 +8,7 @@ import numpy as np
 app = Flask(__name__)
 
 # Define constants
-MODEL_PATH = "server/models/inceptionv3.pth"
+MODEL_PATH = "models/inceptionv3.pth"
 NUM_CLASSES = 3
 CLASS_NAMES = ["Armyworm", "Cutworm", "Red_Spider_Mites"]
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
