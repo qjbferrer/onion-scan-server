@@ -8,9 +8,9 @@ import numpy as np
 app = Flask(__name__)
 
 # Define constants
-MODEL_PATH = "models/inceptionv3.pth"
+MODEL_PATH = "server/models/inceptionv3.pth"
 NUM_CLASSES = 3
-CLASS_NAMES = ["Armyworm", "Cutworm", "Red_Spider_Mites"]
+CLASS_NAMES = ["Armyworm", "Cutworm", "Red_Spider_Mites", "non_pest_images_random"]
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Define preprocessing pipeline (same as val_test_transforms in training)
@@ -21,15 +21,15 @@ PREPROCESS = transforms.Compose([
 ])
 
 def load_model(model_path, num_classes, device):
-    """Load the trained InceptionV3 model."""
+    """Load the trained ShuffleNetV2 model."""
     print("Loading model...")
     try:
-        model = models.inception_v3(pretrained=False, aux_logits=False)
+        model = models.shufflenet_v2_x1_0(pretrained=False)
         num_ftrs = model.fc.in_features
         model.fc = torch.nn.Sequential(
             torch.nn.Linear(num_ftrs, 512),
             torch.nn.ReLU(),
-            torch.nn.Dropout(0.5),
+            torch.nn.Dropout(0.3),
             torch.nn.Linear(512, num_classes)
         )
         model.load_state_dict(torch.load(model_path, map_location=device))
